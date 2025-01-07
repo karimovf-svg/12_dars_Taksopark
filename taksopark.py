@@ -82,37 +82,43 @@ if __name__ == "__main__":
         client.cards.append(cards[i*2])
         client.cards.append(cards[i*2 + 1])
 
-    client_phone = input("Telefon raqamingizni kiriting: ")
-    client = next((c for c in clients if c.phone_number == client_phone), None)
+    while True:
+        print("===Arzon Taksoparkga Xush kelibsiz===")
+        client_phone = input("Telefon raqamingizni kiriting\n(yoki chiqish uchun exit yozing): ")
+        if client_phone.lower() == "exit":
+            print("Bizning Xizmatimizdan foydalanganingiz uchun Tashakkur.")
+            break
 
-    if client:
-        qayerdan = input("Qayerdan: ")
-        qayerga = input("Qayerga: ")
-        distance = random.randint(1, 20)  # Masofa random orqali aniqlanadi
+        client = next((c for c in clients if c.phone_number == client_phone), None)
 
-        # Moshina biriktiriladi
-        car = random.choice(my_taksopark.cars)
-        print(f"Sizga biriktirilgan moshina: {car.raqami}, haydovchi: {car.driver_name}")
+        if client:
+            qayerdan = input("Qayerdan: ")
+            qayerga = input("Qayerga: ")
+            distance = random.randint(1, 20)  # Masofa random orqali aniqlanadi
 
-        narx = distance * 10000  # 1 km = 10,000 so'm
-        print(f"Umumiy masofa: {distance} km. To'lov: {narx} so'm.")
+            # Moshina biriktiriladi
+            car = random.choice(my_taksopark.cars)
+            print(f"Sizga biriktirilgan moshina: {car.raqami}, haydovchi: {car.driver_name}")
 
-        selected_card = client.cards[0]  # Default birinchi karta tanlanadi
+            narx = distance * 10000  # 1 km = 10,000 so'm
+            print(f"Umumiy masofa: {distance} km. To'lov: {narx} so'm.")
 
-        if selected_card.balance >= narx:
-            selected_card.balance -= narx
-            park_share = narx * 0.2
-            car_share = narx * 0.8
+            selected_card = client.cards[0]  # Default birinchi karta tanlanadi
 
-            my_taksopark.balance += park_share
-            car.balance += car_share
+            if selected_card.balance >= narx:
+                selected_card.balance -= narx
+                park_share = narx * 0.2
+                car_share = narx * 0.8
 
-            print(f"To'lov amalga oshirildi! Taksopark ulushi: {park_share} so'm, Moshina ulushi: {car_share} so'm.")
+                my_taksopark.balance += park_share
+                car.balance += car_share
 
-            # Safarni saqlaymiz
-            safar = Safar(client_phone, car.raqami, qayerdan, qayerga, distance)
-            my_taksopark.safarlar.append(safar)
+                print(f"To'lov amalga oshirildi! Taksopark ulushi: {park_share} so'm, Moshina ulushi: {car_share} so'm.")
+
+                # Safarni saqlaymiz
+                safar = Safar(client_phone, car.raqami, qayerdan, qayerga, distance)
+                my_taksopark.safarlar.append(safar)
+            else:
+                print("Karta balansida mablag' yetarli emas!")
         else:
-            print("Karta balansida mablag' yetarli emas!")
-    else:
-        print("Bunday raqam bilan ro'yxatdan o'tgan klient topilmadi!")
+            print("Bunday raqam bilan ro'yxatdan o'tgan klient topilmadi!")
